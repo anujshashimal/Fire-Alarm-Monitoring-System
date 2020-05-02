@@ -1,0 +1,36 @@
+{
+"Sensors": [
+  {
+    "id": "1",
+    "smokeLevel": "shashimal",
+    "co2Level": "16",
+    "floorNo": "f02",
+    "roomNo" : "r01",
+    "status" : "deactive"
+  },
+  {
+    "id": "2",
+    "smokeLevel": "12",
+    "co2Level": "12",
+    "floorNo": "f01",
+    "roomNo" : "r01",
+    "status" : "active"
+  },
+  {
+    "id": "3",
+    "smokeLevel": "12",
+    "co2Level": "12",
+    "floorNo": "f01",
+    "roomNo" : "r01",
+    "status" : "active"
+  },
+  {
+    "id": "4",
+    "smokeLevel": "12",
+    "co2Level": "12",
+    "floorNo": "f01",
+    "roomNo" : "r01",
+    "status" : "deactive"
+  }
+]
+}
