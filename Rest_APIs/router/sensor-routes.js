@@ -33,8 +33,8 @@ const nodeailer = require("nodemailer");
 let transporter = nodeailer.createTransport({
     service: "gmail",
     auth: {
-        user: "",
-        pass: ""
+        user: "chanukadilusha1@gmail.com",
+        pass: "dilusha@321"
     },
 });
 
@@ -47,7 +47,7 @@ router.get("/sensors", (req, res, next) => {
     const customerq = https.get({hostname: "127.0.0.1",port: 4000, path: '/Sensors',method: 'GET' },
         res1 => {
             res1.on('data', d => {
-                console.log(JSON.parse(d));
+                //console.log(JSON.parse(d));
                 res.send(JSON.parse(d));
             })
         });
@@ -74,7 +74,7 @@ router.put("/sensor/:id", (req, res) => {
                 res.setHeader('Access-Control-Allow-Headers', '*');
 
                 let sentinfo = {
-                    from: 'anujshashimal45@gmail.com',
+                    from: 'chanukadilusha1@gmail.com',
                     to: "anujshashimal456@gmail.com",
                     subject: "SmokeLevel and CO2level Increased",
                     text: `SmokeLevel of the sensor ${result.id} 
@@ -83,23 +83,23 @@ router.put("/sensor/:id", (req, res) => {
                     increased to ${result.co2Level}`,
                 };
 
-                // transporter.sendMail(sentinfo, (err, result) => {
-                //     if (err) {
-                //         console.log(err);
-                //     } else {
-                //         function messageCallback(error, res) {
-                //             if (error === null) {
-                //                 console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                //                     ` => code: ${res['status']['code']}` +
-                //                     `, description: ${res['status']['description']}`);
-                //             } else {
-                //                 console.error("Unable to send message. " + error);
-                //             }
-                //         }
-                //         client.sms.message(messageCallback, phoneNumber, message, messageType);
-                //
-                //     }
-                // });
+                transporter.sendMail(sentinfo, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        function messageCallback(error, res) {
+                            if (error === null) {
+                                console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
+                                    ` => code: ${res['status']['code']}` +
+                                    `, description: ${res['status']['description']}`);
+                            } else {
+                                console.error("Unable to send message. " + error);
+                            }
+                        }
+                        client.sms.message(messageCallback, phoneNumber, message, messageType);
+                
+                    }
+                });
 
             } else if (result.co2Level > 5) {
                 let sentinfo = {
@@ -116,16 +116,16 @@ router.put("/sensor/:id", (req, res) => {
 
                         console.log("sent");
 
-                        // function messageCallback(error, responseBody) {
-                        //     if (error === null) {
-                        //         console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                        //             ` => code: ${responseBody['status']['code']}` +
-                        //             `, description: ${responseBody['status']['description']}`);
-                        //     } else {
-                        //         console.error("Unable to send message. " + error);
-                        //     }
-                        // }
-                        // client.sms.message(messageCallback, phoneNumber, message2, messageType);
+                        function messageCallback(error, responseBody) {
+                            if (error === null) {
+                                console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
+                                    ` => code: ${responseBody['status']['code']}` +
+                                    `, description: ${responseBody['status']['description']}`);
+                            } else {
+                                console.error("Unable to send message. " + error);
+                            }
+                        }
+                        client.sms.message(messageCallback, phoneNumber, message2, messageType);
                     }
                 });
 
@@ -165,18 +165,18 @@ router.put("/sensor/:id", (req, res) => {
     );
 });
 
-router.get("/sensor", (req, res, next) => {
+// router.get("/sensor", (req, res, next) => {
 
-    Sensor.find({},(err, words) => {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.setHeader('Access-Control-Allow-Headers', '*');
+//     Sensor.find({},(err, words) => {
+//         res.setHeader('Access-Control-Allow-Origin', '*');
+//         res.setHeader('Access-Control-Allow-Credentials', 'true');
+//         res.setHeader('Access-Control-Allow-Headers', '*');
 
-        res.send(words);
+//         res.send(words);
 
 
-    }).catch(next);
-});
+//     }).catch(next);
+// });
 
 router.get("/sensor/:id", (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -223,15 +223,17 @@ router.post("/sensor", (req, res, next) => {
 });
 router.get("/sensorret", (req, res, next) => {
 
-    Sensor.find({}, (err, sensors) => {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Headers', '*');
 
-        res.send(sensors);
-
-
-    }).catch(next);
+    const customerq = https.get({hostname: "127.0.0.1",port: 4000, path: '/Sensors',method: 'GET' },
+        res1 => {
+            res1.on('data', d => {
+               // console.log(JSON.parse(d));
+                res.send(JSON.parse(d));
+            })
+        });
 });
 
 
@@ -256,7 +258,7 @@ router.get("/sensor", (req, res, next) => {
     }).catch(next);
 });
 
-router.put("/sensor/update", (req, res, next) => {
+router.post("/sensor/update", (req, res, next) => {
 
     Sensor_Det.findOneAndUpdate(req.params.Id, req.body, (err, user) => {
         if (err) {
