@@ -33,9 +33,14 @@ class TableSectionInbound extends Component {
             .then(response => response.data)
             .then(data => {
                 console.log(data);
-                // if (err) throw err;
+                if(data.co2Level > 4){
+                    alert("Error")
+                    console.log('24')
+                }else{
+                    console.log('2')
+                    this.setState({ posts: data })
+                }
 
-                this.setState({ posts: data })
             })
 
             .then(async() => {
