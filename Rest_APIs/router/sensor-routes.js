@@ -2,6 +2,9 @@ const express = require("express");
 const https = require('http');
 const router = express.Router();
 const Sensor = require("../models/sensor-det-models");
+const Sensor_Det = require("../models/Senor-ret");
+
+
 require("dotenv").config();
 // process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
@@ -42,12 +45,12 @@ router.get("/sensors", (req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', '*');
 
     const customerq = https.get({hostname: "127.0.0.1",port: 4000, path: '/Sensors',method: 'GET' },
-res1 => {
+        res1 => {
             res1.on('data', d => {
                 console.log(JSON.parse(d));
                 res.send(JSON.parse(d));
             })
-    });
+        });
 });
 
 router.post("/sensor", (req, res, next) => {
@@ -57,6 +60,7 @@ router.post("/sensor", (req, res, next) => {
 });
 
 router.put("/sensor/:id", (req, res) => {
+
     Sensor.findOneAndUpdate(
         { id: req.params.id },
         { $set: req.body },
@@ -202,6 +206,67 @@ router.delete("/sensor/:id", (req, res, next) => {
             });
         }
     }).catch(next);
+});
+
+
+
+
+// laka
+
+router.post("/sensor", (req, res, next) => {
+
+    Sensor.create(req.body)
+        .then((sensor) => {
+            res.send(sensor);
+        })
+        .catch(next);
+});
+router.get("/sensorret", (req, res, next) => {
+
+    Sensor.find({}, (err, sensors) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+        res.setHeader('Access-Control-Allow-Headers', '*');
+
+        res.send(sensors);
+
+
+    }).catch(next);
+});
+
+
+router.post("/sensor/Add", (req, res, next) => {
+
+    Sensor_Det.create(req.body)
+        .then((sensor) => {
+            res.send(sensor);
+        })
+        .catch(next);
+});
+
+router.get("/sensor", (req, res, next) => {
+
+    Sensor_Det.find({}, (err, sensors) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+        res.setHeader('Access-Control-Allow-Headers', '*');
+
+        res.send(sensors);
+
+    }).catch(next);
+});
+
+router.put("/sensor/update", (req, res, next) => {
+
+    Sensor_Det.findOneAndUpdate(req.params.Id, req.body, (err, user) => {
+        if (err) {
+            return res
+                .status(500)
+                .send({error: "unsuccessful"})
+        };
+        res.send({success: "success"});
+    });
+
 });
 
 module.exports = router;
