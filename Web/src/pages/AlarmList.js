@@ -49,36 +49,7 @@ class TableSectionInbound extends Component {
             })
     }
 
-    // getAllSensorNotify = async () => {
-    //     await axios.get('http://localhost:5000/api/sensor/')
-    //         .then(response => response.data)
-    //         .then(data => {
-    //             data.map( (alertdet) => {
-    //                 if(alertdet.co2Level >5 && alertdet.smokeLevel > 5){
-    //                     console.log('co2Level and smoke Increased')
-    //                     this.setState({notify:true})
-    //                 }else if(alertdet.co2Level> 5){
-    //                     console.log('')
-    //                 }else if(alertdet.smokeLevel){
-    //                     console.log('')
-    //                 }else if(''){
-    //                     console.log('')
-    //                 }
-    //             })
-    //
-    //             // if (err) throw err;
-    //
-    //             this.setState({ posts: data })
-    //         })
-    //
-    //         .then(async() => {
-    //             this.setState({ tableRows:this.assemblePosts(), isLoading:true })
-    //             console.log(this.state.tableRows);
-    //
-    //         })
-    // }
-
-
+    //MAPPING SENSOR APP DETAILS TO THE RELAVENT TABLE DATA
     assemblePosts= () => {
 
         let posts =this.state.posts.map((post) => {
@@ -94,8 +65,6 @@ class TableSectionInbound extends Component {
             )
 
         });
-
-
 
         return posts;
     }
