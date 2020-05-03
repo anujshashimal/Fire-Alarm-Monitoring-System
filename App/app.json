@@ -36,6 +36,13 @@
     "floorNo": "F2",
     "roomNo" : "R2",
     "status" : "active"
+  },{
+    "smokeLevel": 3,
+    "co2Level": 3,
+    "id": 6,
+    "floorNo": "F2",
+    "roomNo" : "R2",
+    "status" : "deactive"
   }
 ]
 }
