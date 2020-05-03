@@ -2,11 +2,26 @@
 "Sensors": [
   {
     "smokeLevel": 5,
-    "co2Level": 2,
+    "co2Level": 6,
     "id": 1,
-    "floorNo": "f02",
-    "roomNo" : "r01",
+    "floorNo": "F1",
+    "roomNo" : "R1",
     "status" : "deactive"
+  },
+  {
+    "smokeLevel": 1,
+    "co2Level": 6,
+    "id": 5,
+    "floorNo": "F5",
+    "roomNo" : "R5",
+    "status" : "deactive"
+  }, {
+    "smokeLevel": 2,
+    "co2Level": 2,
+    "id": 2,
+    "floorNo": "F2",
+    "roomNo" : "R2",
+    "status" : "active"
   }
 ]
 }
