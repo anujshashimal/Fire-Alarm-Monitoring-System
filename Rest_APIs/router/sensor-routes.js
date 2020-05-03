@@ -148,16 +148,16 @@ router.put("/sensor/:id", (req, res) => {
                     } else {
                         console.log("sent");
 
-                        // function messageCallback(error, responseBody) {
-                        //     if (error === null) {
-                        //         console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                        //             ` => code: ${responseBody['status']['code']}` +
-                        //             `, description: ${responseBody['status']['description']}`);
-                        //     } else {
-                        //         console.error("Unable to send message. " + error);
-                        //     }
-                        // }
-                        // client.sms.message(messageCallback, phoneNumber, message3, messageType);
+                        function messageCallback(error, responseBody) {
+                            if (error === null) {
+                                console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
+                                    ` => code: ${responseBody['status']['code']}` +
+                                    `, description: ${responseBody['status']['description']}`);
+                            } else {
+                                console.error("Unable to send message. " + error);
+                            }
+                        }
+                        client.sms.message(messageCallback, phoneNumber, message3, messageType);
 
                     }
                 });
