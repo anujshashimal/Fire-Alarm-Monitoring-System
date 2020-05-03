@@ -3,34 +3,39 @@ const https = require('http');
 const router = express.Router();
 const Sensor = require("../models/sensor-det-models");
 const Sensor_Det = require("../models/Senor-ret");
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
+// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 
 require("dotenv").config();
-// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 //SMS Service Configuration
-var TeleSignSDK = require('telesignsdk');
+const TeleSignSDK = require('telesignsdk');
 const customerId = "A4DE0A77-2FB9-4E61-ADF4-772CF3A7A7D4";
 const apiKey = "ApEiMnftQSsVakTWhRFZYQIBk5oRtfrAUN1OU7+3AFpW6LpA8vpP1PZqFL5h0unuYXrMtd5rlcV3jz6AokAj8w==";
 const rest_endpoint = "https://rest-api.telesign.com";
 const timeout = 10*1000; // 10 secs
 
+
+//SMS Sercive Configuration
 const client = new TeleSignSDK( customerId,
     apiKey,
     rest_endpoint,
     timeout
 );
 
+
+//Constants that help to send an SMS
 const phoneNumber = "+94772181220";
 const message = "co2 and Smoke Level is Increased";
 const message2 = "co2 Level is Increased";
 const message3 = "smoke Level is Increased";
 const messageType = "ARN";
 
-
+//EMAIL Configuration USING nodemailer
 const nodeailer = require("nodemailer");
 
+//EMAIL Configuration USING nodemailer
 let transporter = nodeailer.createTransport({
     service: "gmail",
     auth: {
@@ -39,6 +44,9 @@ let transporter = nodeailer.createTransport({
     },
 });
 
+
+//GET SENSOR APP DETAILS USIGN THIS API
+//CREATED THE ASYNC FUNCTION TO GET ANTOTHER HOSTED JSON DUMMY VALUES
 router.get("/sensors", (req, res, next) => {
     console.log("response sent");
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -54,12 +62,9 @@ router.get("/sensors", (req, res, next) => {
         });
 });
 
-router.post("/sensor", (req, res, next) => {
-    Sensor.create(req.body).then((sensor) => {
-            res.send(sensor);
-        }).catch(next);
-});
 
+//WHEN CO2 AND SMOKE LEVEL GOES UP THIS WILL FIRE
+//EMAIL AND SMS WILL SEND THROUGH THIS API
 router.put("/sensor/:id", (req, res) => {
 
     Sensor.findOneAndUpdate(
@@ -144,16 +149,16 @@ router.put("/sensor/:id", (req, res) => {
                     } else {
                         console.log("sent");
 
-                        // function messageCallback(error, responseBody) {
-                        //     if (error === null) {
-                        //         console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                        //             ` => code: ${responseBody['status']['code']}` +
-                        //             `, description: ${responseBody['status']['description']}`);
-                        //     } else {
-                        //         console.error("Unable to send message. " + error);
-                        //     }
-                        // }
-                        // client.sms.message(messageCallback, phoneNumber, message3, messageType);
+                        function messageCallback(error, responseBody) {
+                            if (error === null) {
+                                console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
+                                    ` => code: ${responseBody['status']['code']}` +
+                                    `, description: ${responseBody['status']['description']}`);
+                            } else {
+                                console.error("Unable to send message. " + error);
+                            }
+                        }
+                        client.sms.message(messageCallback, phoneNumber, message3, messageType);
 
                     }
                 });
@@ -166,18 +171,7 @@ router.put("/sensor/:id", (req, res) => {
     );
 });
 
-// router.get("/sensor", (req, res, next) => {
 
-//     Sensor.find({},(err, words) => {
-//         res.setHeader('Access-Control-Allow-Origin', '*');
-//         res.setHeader('Access-Control-Allow-Credentials', 'true');
-//         res.setHeader('Access-Control-Allow-Headers', '*');
-
-//         res.send(words);
-
-
-//     }).catch(next);
-// });
 
 router.get("/sensor/:id", (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -195,6 +189,8 @@ router.get("/sensor/:id", (req, res, next) => {
     }).catch(next);
 });
 
+
+//DELETE SENSOR DETAILS THROUGH THIS API
 router.delete("/sensor/:id", (req, res, next) => {
     Sensor.deleteOne({ id: req.params.id }, (err, result) => {
         if (result.deletedCount) {
@@ -212,8 +208,7 @@ router.delete("/sensor/:id", (req, res, next) => {
 
 
 
-// laka
-
+//ADD SENSOR DETAILS THROUGH THIS API
 router.post("/sensor", (req, res, next) => {
 
     Sensor.create(req.body)
@@ -222,6 +217,9 @@ router.post("/sensor", (req, res, next) => {
         })
         .catch(next);
 });
+
+
+//GET TIME TO TIME UPDATED SENSOR APP DETAILS TO DESKTOP APPLICATION
 router.get("/sensorret", (req, res, next) => {
 
     // res.setHeader('Access-Control-Allow-Origin', '*');
@@ -330,6 +328,7 @@ router.get("/sensorret", (req, res, next) => {
 });
 
 
+//REGISTER SENSORS THROUGH THIS API
 router.post("/sensor/Add", (req, res, next) => {
 
     Sensor_Det.create(req.body)
@@ -339,6 +338,8 @@ router.post("/sensor/Add", (req, res, next) => {
         .catch(next);
 });
 
+
+//GET ALL REGISTERED DETAILS
 router.get("/sensor", (req, res, next) => {
 
     Sensor_Det.find({}, (err, sensors) => {
@@ -351,6 +352,8 @@ router.get("/sensor", (req, res, next) => {
     }).catch(next);
 });
 
+
+//UPDATE THE REGISTERED DETAILS
 router.post("/sensor/update", (req, res, next) => {
 
     Sensor_Det.findOneAndUpdate(req.params.Id, req.body, (err, user) => {
