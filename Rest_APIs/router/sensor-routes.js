@@ -159,6 +159,9 @@ router.get("/sensorret", (req, res, next) => {
                             }
                         });
                     } else if (object.smokeLevel > 5) {
+
+                        //EMAIL CONFIGURATION WHEN ACTION FIRED
+
                         let sentinfo = {
                             from: 'sanduntharaka258@gmail.com',
                             to: "anujshashimal456@gmail.com",
@@ -171,7 +174,9 @@ router.get("/sensorret", (req, res, next) => {
                                 console.log(err);
                             } else {
                                 console.log("sent");
- 
+
+                                //SMS CONFIGURATION WHEN ACTION GET FIRED
+
                                 function messageCallback(error, responseBody) {
                                     if (error === null) {
                                         console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
@@ -188,6 +193,9 @@ router.get("/sensorret", (req, res, next) => {
  
                         console.log(object.smokeLevel);
                     }else if (object.co2Level > 5) {
+
+                        //EMAIL CONFIGURATION WHEN ACTION FIRED
+
                         let sentinfo = {
                             from: 'sanduntharaka258@gmail.com',
                             to: "anujshashimal456@gmail.com",
@@ -201,7 +209,9 @@ router.get("/sensorret", (req, res, next) => {
                             } else {
  
                                 console.log("sent");
- 
+
+                                //SMS CONFIGURATION WHEN ACTION GET FIRED
+
                                 function messageCallback(error, responseBody) {
                                     if (error === null) {
                                         console.log(`Messaging response for messaging phone number: ${phoneNumber}` +

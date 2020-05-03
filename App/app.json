@@ -22,6 +22,20 @@
     "floorNo": "F2",
     "roomNo" : "R2",
     "status" : "active"
+  },{
+    "smokeLevel": 2,
+    "co2Level": 4,
+    "id": 2,
+    "floorNo": "F2",
+    "roomNo" : "R2",
+    "status" : "active"
+  },{
+    "smokeLevel": 2,
+    "co2Level": 2,
+    "id": 3,
+    "floorNo": "F2",
+    "roomNo" : "R2",
+    "status" : "active"
   }
 ]
 }
