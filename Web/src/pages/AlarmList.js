@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { MDBDataTable, Row, Col, Card, CardBody } from 'mdbreact';
-
 import axios from 'axios';
 const JSSERVER_CONFIG = { host: "htpp://127.0.0.1", port: 4000};
 
@@ -21,14 +20,18 @@ class TableSectionInbound extends Component {
     componentWillUnmount() {
         clearInterval(this.getAllSensorDet());
     }
+
+    //SET THE INTERVAL WITHING 15 SECONDS
     componentDidMount() {
         this.getAllSensorDet();
-        this.interval = setInterval(this.getAllSensorDet, 1000);
+        this.interval = setInterval(this.getAllSensorDet, 15000);
     }
 
 // `${JSSERVER_CONFIG.host}:${JSSERVER_CONFIG.port}/Sensors`
 
     getAllSensorDet = async () => {
+
+        //FETCH SENSOR APP DETAILS USING RESPI API
         await axios.get(`http://localhost:5000/api/sensors`)
             .then(response => response.data)
             .then(data => {
@@ -73,6 +76,8 @@ class TableSectionInbound extends Component {
     render() {
 
         const data = {
+
+            //DEFINE COLUMNS
             columns: [
                 {
                     label:'id',
