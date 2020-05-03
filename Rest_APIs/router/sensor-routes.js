@@ -3,8 +3,7 @@ const https = require('http');
 const router = express.Router();
 const Sensor = require("../models/sensor-det-models");
 const Sensor_Det = require("../models/Senor-ret");
-
-// process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 
 require("dotenv").config();
@@ -17,7 +16,7 @@ const rest_endpoint = "https://rest-api.telesign.com";
 const timeout = 10*1000; // 10 secs
 
 
-//SMS Sercive Configuration
+//SMS SERVICE CONFIGURATION
 const client = new TeleSignSDK( customerId,
     apiKey,
     rest_endpoint,
@@ -25,17 +24,17 @@ const client = new TeleSignSDK( customerId,
 );
 
 
-//Constants that help to send an SMS
+//CONSTANTS THAT HELP TO SEND THE SMS TO THE MOBILES
 const phoneNumber = "+94772181220";
 const message = "co2 and Smoke Level is Increased";
 const message2 = "co2 Level is Increased";
 const message3 = "smoke Level is Increased";
 const messageType = "ARN";
 
-//EMAIL Configuration USING nodemailer
+//EMAIL CONFIGURATION USING nodemailer
 const nodeailer = require("nodemailer");
 
-//EMAIL Configuration USING nodemailer
+//EMAIL CONFIGURATION USING nodemailer
 let transporter = nodeailer.createTransport({
     service: "gmail",
     auth: {
@@ -45,8 +44,9 @@ let transporter = nodeailer.createTransport({
 });
 
 
-//GET SENSOR APP DETAILS USIGN THIS API
-//CREATED THE ASYNC FUNCTION TO GET ANTOTHER HOSTED JSON DUMMY VALUES
+//GET SENSOR APP DETAILS USING THIS API
+//CREATED THE ASYNC FUNCTION TO GET ANOTHER HOSTED JSON DUMMY VALUES
+
 router.get("/sensors", (req, res, next) => {
     console.log("response sent");
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -63,116 +63,7 @@ router.get("/sensors", (req, res, next) => {
 });
 
 
-//WHEN CO2 AND SMOKE LEVEL GOES UP THIS WILL FIRE
-//EMAIL AND SMS WILL SEND THROUGH THIS API
-router.put("/sensor/:id", (req, res) => {
-
-    Sensor.findOneAndUpdate(
-        { id: req.params.id },
-        { $set: req.body },
-
-        { new: true },
-
-        (error, result) => {
-            if (result.co2Level > 5 && result.smokeLevel > 5) {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader('Access-Control-Allow-Credentials', 'true');
-                res.setHeader('Access-Control-Allow-Headers', '*');
-
-                let sentinfo = {
-                    from: 'chanukadilusha1@gmail.com',
-                    to: "anujshashimal456@gmail.com",
-                    subject: "SmokeLevel and CO2level Increased",
-                    text: `SmokeLevel of the sensor ${result.id} 
-                    is increased to ${result.smokeLevel}  
-                    and CO2 Level of the sensor ${result.id} 
-                    increased to ${result.co2Level}`,
-                };
-
-                transporter.sendMail(sentinfo, (err, result) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        function messageCallback(error, res) {
-                            if (error === null) {
-                                console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                                    ` => code: ${res['status']['code']}` +
-                                    `, description: ${res['status']['description']}`);
-                            } else {
-                                console.error("Unable to send message. " + error);
-                            }
-                        }
-                        client.sms.message(messageCallback, phoneNumber, message, messageType);
-                
-                    }
-                });
-
-            } else if (result.co2Level > 5) {
-                let sentinfo = {
-                    from: 'anujshashimal45@gmail.com',
-                    to: "subasith@gmail.com",
-                    subject: "SmokeLevel and CO2 level Increased",
-                    text: `CO2 Level of the sensor ${result.id} increased to ${result.co2Level}`,
-                };
-
-                transporter.sendMail(sentinfo, (err, data) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-
-                        console.log("sent");
-
-                        function messageCallback(error, responseBody) {
-                            if (error === null) {
-                                console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                                    ` => code: ${responseBody['status']['code']}` +
-                                    `, description: ${responseBody['status']['description']}`);
-                            } else {
-                                console.error("Unable to send message. " + error);
-                            }
-                        }
-                        client.sms.message(messageCallback, phoneNumber, message2, messageType);
-                    }
-                });
-
-            } else if (result.smokeLevel > 5) {
-                let sentinfo = {
-                    from: 'anujshashimal45@gmail.com',
-                    to: "subasith@gmail.com",
-                    subject: "SmokeLevel and CO2 level Increased",
-                    text: `SmokeLevel of the sensor ${result.id} increased to ${result.smokeLevel}`,
-                };
-
-                transporter.sendMail(sentinfo, (err, data) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("sent");
-
-                        function messageCallback(error, responseBody) {
-                            if (error === null) {
-                                console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                                    ` => code: ${responseBody['status']['code']}` +
-                                    `, description: ${responseBody['status']['description']}`);
-                            } else {
-                                console.error("Unable to send message. " + error);
-                            }
-                        }
-                        client.sms.message(messageCallback, phoneNumber, message3, messageType);
-
-                    }
-                });
-
-                console.log(result.smokeLevel);
-            }
-
-            res.send(result);
-        }
-    );
-});
-
-
-
+//GET THE PARTICULAR SENSOR DETAILS EX: FLOOR NO, AND ROOM NO CONSIST OF SENSOR
 router.get("/sensor/:id", (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -220,11 +111,14 @@ router.post("/sensor", (req, res, next) => {
 
 
 //GET TIME TO TIME UPDATED SENSOR APP DETAILS TO DESKTOP APPLICATION
+//WHEN CO2 AND SMOKE LEVEL GOES UP THIS WILL FIRE
+//EMAIL AND SMS WILL SEND THROUGH THIS API WHEN THE CO2 AND SMOKE LEVEL GOES UP
+//CALLED BY BOTH DESKTOP AND WEB APPLICATION
 router.get("/sensorret", (req, res, next) => {
 
-    // res.setHeader('Access-Control-Allow-Origin', '*');
-    // res.setHeader('Access-Control-Allow-Credentials', 'true');
-    // res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Headers', '*');
 
     const customerq = https.get({hostname: "127.0.0.1",port: 4000, path: '/Sensors',method: 'GET' },
         res1 => {
@@ -235,7 +129,8 @@ router.get("/sensorret", (req, res, next) => {
                 json.forEach(function (object) {
                     console.log(object.co2Level )
                     if(object.co2Level >5 && object.smokeLevel >5){
- 
+
+                        //EMAIL CONFIGURATION WHEN ACTION FIRED
                         let sentinfo = {
                             from: 'sanduntharaka258@gmail.com',
                             to: "anujshashimal456@gmail.com",
@@ -245,21 +140,22 @@ router.get("/sensorret", (req, res, next) => {
                              and CO2 Level of the sensor ${object.id} 
                              increased to ${object.co2Level}`,
                         };
- 
+
+                        //SMS CONFIGURATION WHEN ACTION GET FIRED
                         transporter.sendMail(sentinfo, (err, object) => {
                             if (err) {
                                 console.log(err);
                             } else {
-                                // function messageCallback(error, res) {
-                                //     if (error === null) {
-                                //         console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
-                                //             ` => code: ${res['status']['code']}` +
-                                //             `, description: ${res['status']['description']}`);
-                                //     } else {
-                                //         console.error("Unable to send message. " + error);
-                                //     }
-                                // }
-                                // client.sms.message(messageCallback, phoneNumber, message, messageType);
+                                function messageCallback(error, res) {
+                                    if (error === null) {
+                                        console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
+                                            ` => code: ${res['status']['code']}` +
+                                            `, description: ${res['status']['description']}`);
+                                    } else {
+                                        console.error("Unable to send message. " + error);
+                                    }
+                                }
+                                client.sms.message(messageCallback, phoneNumber, message, messageType);
                             }
                         });
                     } else if (object.smokeLevel > 5) {
