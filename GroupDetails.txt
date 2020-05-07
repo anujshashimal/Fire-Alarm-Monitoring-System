@@ -1,0 +1,9 @@
+//GROUP DETAILS
+
+IT 18115444 - Ratnasooriya K.A.L.L      -  lahirulakruwan5@gmail.com		0771128607
+IT 18121834 – Jayasekara A.S            -  anujshashimal456@gmail.com 		0703049454
+IT 18126020 - Ranjith K.H.V.S           -  subasith@gmail.com			077 2181220
+IT 18121766 – Kariyapperuma K.A.D.R.L.  -  ravindu.kariyapperuma@gmail.com 	071 6371010
+
+//VIDEO URL -  https://www.youtube.com/watch?v=WEhnAvFFyss
+//GITHUB URL - https://github.com/anujshashimal/Fire-Alarm-Monitoring-System
